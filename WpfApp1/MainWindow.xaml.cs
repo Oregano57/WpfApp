@@ -20,7 +20,7 @@ public partial class MainWindow : Window
 {
     private ToDoApp app;
     private CancellationTokenSource? _cts;
-    public ObservableCollection<string> Tasks => app.Get(); //ask why lambda?
+    public ObservableCollection<string> Tasks => app.Get();
     
     public MainWindow()
     {
@@ -47,7 +47,10 @@ public partial class MainWindow : Window
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         string task = TaskInput.Text;
-        app.AddTask(task);
+        if (task == "")
+            app.AddTask("Empty Task");
+        else
+            app.AddTask(task);
         TaskInput.Text = "";
     }
 
