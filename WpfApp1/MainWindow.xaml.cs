@@ -20,24 +20,16 @@ public partial class MainWindow : Window
 {
     private ToDoApp app;
     private CancellationTokenSource? _cts;
-    public ObservableCollection<string> Tasks => app.Get();
+    public ObservableCollection<string> Tasks => app.Get(); //ask why lambda?
     
     public MainWindow()
     {
         InitializeComponent();
         app = new ToDoApp();
         app.SetTasks(LoadTasks());
-        RefreshTaskList();
+        DataContext = this;
     }
-
-
-    public void RefreshTaskList()
-    {
-        TaskListBox.Items.Clear();
-        foreach (string task in app.Get())
-            TaskListBox.Items.Add(task);
-    }
-
+    
     public List<string> LoadTasks()
     {
         List<string> tasks = new List<string>();
@@ -56,7 +48,6 @@ public partial class MainWindow : Window
     {
         string task = TaskInput.Text;
         app.AddTask(task);
-        RefreshTaskList();
         TaskInput.Text = "";
     }
 
@@ -80,7 +71,6 @@ public partial class MainWindow : Window
             {
                 app.RemoveTask(TaskListBox.SelectedIndex);
                 RemoveSuccessfulBox.Text = "Task Removed";
-                RefreshTaskList();
                 await Task.Delay(5000, token);
                 RemoveSuccessfulBox.Text = "";
                 return;
