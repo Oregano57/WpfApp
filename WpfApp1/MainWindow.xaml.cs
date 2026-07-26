@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,6 +23,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         app = new ToDoApp();
+        app.SetTasks(LoadTasks());
+        RefreshTaskList();
     }
 
     public class ToDoApp
@@ -52,11 +55,33 @@ public partial class MainWindow : Window
         
     }
 
+    public List<string> LoadTasks()
+    {
+        List<string> tasks = new List<string>();
+
+        if (File.Exists("tasks.txt"))
+            tasks = new List<string>(File.ReadAllLines("tasks.txt"));
+        return tasks;
+    }
+
+    public void SaveTasks()
+    {
+        File.WriteAllLines("tasks.txt", app.Get());
+    }
+    
     private void AddButton_Click(object sender, RoutedEventArgs e)
     {
         string task = TaskInput.Text;
         app.AddTask(task);
         RefreshTaskList();
         TaskInput.Text = "";
+    }
+
+    private async void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        SaveTasks();
+        SaveSuccessfulBox.Text = "Save Successful";
+        await Task.Delay(5000);
+        SaveSuccessfulBox.Text = "";
     }
 }

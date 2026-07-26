@@ -9,7 +9,13 @@
     <Grid>
         <StackPanel Margin="10">
             <TextBox x:Name="TaskInput" Height="20"/>
-            <Button Content="Add Task" Click="AddButton_Click" Margin="0,10,0,10"/>
+            
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Add Task" Click="AddButton_Click" Height="20" Width="500" Margin="0, 7,5,0"/>
+                <Button Content="Save Tasks" Click="SaveButton_Click" Height="20" Width="270" Margin="5,7,1,0"/>
+            </StackPanel>
+            
+            <TextBlock x:Name="SaveSuccessfulBox" FontSize="7" Width="270" Margin="510,0,0,0"/>
             <ListBox x:Name="TaskListBox" Height="200"/>
         </StackPanel>
     </Grid>
