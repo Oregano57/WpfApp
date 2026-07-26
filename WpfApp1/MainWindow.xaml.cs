@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace WpfApp1;
 
@@ -19,6 +20,7 @@ public partial class MainWindow : Window
 {
     private ToDoApp app;
     private CancellationTokenSource? _cts;
+    public ObservableCollection<string> Tasks => app.Get();
     
     public MainWindow()
     {
@@ -34,7 +36,6 @@ public partial class MainWindow : Window
         TaskListBox.Items.Clear();
         foreach (string task in app.Get())
             TaskListBox.Items.Add(task);
-        
     }
 
     public List<string> LoadTasks()

@@ -1,22 +1,24 @@
-﻿namespace WpfApp1;
+﻿using System.Collections.ObjectModel;
+
+namespace WpfApp1;
 
 public class ToDoApp
 {
-    private List<string> _todoList = new List<string>();
+    private ObservableCollection<string> _todoList = new ObservableCollection<string>();
 
     public void AddTask(string task)
     {
         _todoList.Add(task);
     }
 
-    public List<string> Get()
+    public ObservableCollection<string> Get()
     {
         return _todoList;
     }
 
     public void SetTasks(List<string> tasks)
     {
-        _todoList = tasks;
+        _todoList = new ObservableCollection<string>(tasks);
     }
 
     public void RemoveTask(int index)
