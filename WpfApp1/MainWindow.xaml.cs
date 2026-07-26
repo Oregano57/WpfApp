@@ -18,6 +18,7 @@ namespace WpfApp1;
 public partial class MainWindow : Window
 {
     private ToDoApp app;
+    private CancellationTokenSource? _cts;
     
     public MainWindow()
     {
@@ -27,25 +28,6 @@ public partial class MainWindow : Window
         RefreshTaskList();
     }
 
-    public class ToDoApp
-    {
-        private List<string> _todoList = new List<string>();
-
-        public void AddTask(string task)
-        {
-            _todoList.Add(task);
-        }
-
-        public List<string> Get()
-        {
-            return _todoList;
-        }
-
-        public void SetTasks(List<string> tasks)
-        {
-            _todoList = tasks;
-        }
-    }
 
     public void RefreshTaskList()
     {
@@ -83,5 +65,33 @@ public partial class MainWindow : Window
         SaveSuccessfulBox.Text = "Save Successful";
         await Task.Delay(5000);
         SaveSuccessfulBox.Text = "";
+    }
+
+    private async void RemoveButton_Click(object sender, RoutedEventArgs e)
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        try
+        {
+            if (TaskListBox.SelectedIndex != -1)
+            {
+                app.RemoveTask(TaskListBox.SelectedIndex);
+                RemoveSuccessfulBox.Text = "Task Removed";
+                RefreshTaskList();
+                await Task.Delay(5000, token);
+                RemoveSuccessfulBox.Text = "";
+                return;
+            }
+            RemoveSuccessfulBox.Text = "Please Select A Task";
+            await Task.Delay(3000, token);
+            RemoveSuccessfulBox.Text = "";
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
     }
 }
